@@ -12,10 +12,8 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") //UTC
     private Instant createdAt;
-
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") //UTC
     private Instant updatedAt;
 
