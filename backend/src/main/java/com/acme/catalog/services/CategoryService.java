@@ -3,8 +3,11 @@ package com.acme.catalog.services;
 import com.acme.catalog.dto.CategoryDTO;
 import com.acme.catalog.entities.Category;
 import com.acme.catalog.repositories.CategoryRepository;
+import com.acme.catalog.services.exceptions.DatabaseException;
 import com.acme.catalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +53,18 @@ public class CategoryService {
         }
         catch (EntityNotFoundException exception) {
             throw new ResourceNotFoundException("Id not found: " + id);
+        }
+    }
+
+    public void delete(Long id) {
+        try {
+            repository.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException exception) {
+            throw new ResourceNotFoundException("Id not found: " + id);
+        }
+        catch (DataIntegrityViolationException exception) {
+            throw new DatabaseException("This category has products in it");
         }
     }
 }
