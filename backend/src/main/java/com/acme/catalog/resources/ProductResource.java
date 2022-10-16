@@ -17,7 +17,7 @@ import java.net.URI;
 public class ProductResource {
 
     @Autowired
-    ProductService service;
+    ProductService productService;
 
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> findAll(
@@ -27,35 +27,35 @@ public class ProductResource {
             @RequestParam(value = "orderBy", defaultValue = "name") String orderBy
     ) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-        Page<ProductDTO> products = service.findAllPaged(pageRequest);
-        return ResponseEntity.ok(products);
+        Page<ProductDTO> productsDTO = productService.findAllPaged(pageRequest);
+        return ResponseEntity.ok(productsDTO);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-        ProductDTO product = service.findById(id);
-        return ResponseEntity.ok(product);
+        ProductDTO productDTO = productService.findById(id);
+        return ResponseEntity.ok(productDTO);
     }
 
     @PostMapping()
     public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO productDTO) {
-        ProductDTO product = service.insert(productDTO);
+        ProductDTO savedProductDTO = productService.insert(productDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(productDTO.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(product);
+        return ResponseEntity.created(location).body(savedProductDTO);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
-        ProductDTO product = service.update(id, productDTO);
-        return ResponseEntity.ok(product);
+        ProductDTO savedProductDTO = productService.update(id, productDTO);
+        return ResponseEntity.ok(savedProductDTO);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> delete(@PathVariable Long id) {
-        service.delete(id);
+        productService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

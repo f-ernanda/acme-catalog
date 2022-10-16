@@ -20,36 +20,36 @@ import java.util.Optional;
 public class CategoryService {
 
     @Autowired
-    CategoryRepository repository;
+    CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
-        Page<Category> page = repository.findAll(pageRequest);
+        Page<Category> page = categoryRepository.findAll(pageRequest);
         return page.map(CategoryDTO::new);
     }
 
     @Transactional(readOnly = true)
     public CategoryDTO findById(Long id) {
-        Optional<Category> optionalEntity = repository.findById(id);
-        Category entity = optionalEntity.orElseThrow(() -> new ResourceNotFoundException("Category not found: " + id));
-        return new CategoryDTO(entity);
+        Optional<Category> optionalEntity = categoryRepository.findById(id);
+        Category categoryEntity = optionalEntity.orElseThrow(() -> new ResourceNotFoundException("Category not found: " + id));
+        return new CategoryDTO(categoryEntity);
     }
 
     @Transactional
     public CategoryDTO insert(CategoryDTO categoryDTO) {
-        Category entity = new Category();
-        entity.setName(categoryDTO.getName());
-        Category savedEntity = repository.save(entity);
-        return new CategoryDTO(savedEntity);
+        Category categoryEntity = new Category();
+        categoryEntity.setName(categoryDTO.getName());
+        Category savedCategoryEntity = categoryRepository.save(categoryEntity);
+        return new CategoryDTO(savedCategoryEntity);
     }
 
     @Transactional
     public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
         try {
-            Category entity = repository.getReferenceById(id);
-            entity.setName(categoryDTO.getName());
-            Category savedEntity = repository.save(entity);
-            return new CategoryDTO(savedEntity);
+            Category categoryEntity = categoryRepository.getReferenceById(id);
+            categoryEntity.setName(categoryDTO.getName());
+            Category savedCategoryEntity = categoryRepository.save(categoryEntity);
+            return new CategoryDTO(savedCategoryEntity);
         }
         catch (EntityNotFoundException exception) {
             throw new ResourceNotFoundException("Category not found: " + id);
@@ -58,7 +58,7 @@ public class CategoryService {
 
     public void delete(Long id) {
         try {
-            repository.deleteById(id);
+            categoryRepository.deleteById(id);
         }
         catch (EmptyResultDataAccessException exception) {
             throw new ResourceNotFoundException("Category not found: " + id);
