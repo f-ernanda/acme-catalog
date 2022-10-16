@@ -20,7 +20,7 @@ public class CategoryResource {
     CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDTO>> findAll(
+    public ResponseEntity<Page<CategoryDTO>> findAllPaged(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "ASC") String direction,
@@ -37,7 +37,7 @@ public class CategoryResource {
         return ResponseEntity.ok(categoryDTO);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO savedCategoryDTO = categoryService.insert(categoryDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()

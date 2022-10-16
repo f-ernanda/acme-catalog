@@ -56,6 +56,7 @@ public class CategoryService {
         }
     }
 
+    @Transactional
     public void delete(Long id) {
         try {
             categoryRepository.deleteById(id);
