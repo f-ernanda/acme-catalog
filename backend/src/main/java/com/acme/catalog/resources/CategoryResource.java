@@ -4,8 +4,7 @@ import com.acme.catalog.dto.CategoryDTO;
 import com.acme.catalog.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,14 +19,8 @@ public class CategoryResource {
     CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDTO>> findAllPaged(
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "12") Integer size,
-            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-            @RequestParam(value = "orderBy", defaultValue = "name") String orderBy
-    ) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-        Page<CategoryDTO> categoriesDTO = categoryService.findAllPaged(pageRequest);
+    public ResponseEntity<Page<CategoryDTO>> findAllPaged(Pageable pageable) {
+        Page<CategoryDTO> categoriesDTO = categoryService.findAllPaged(pageable);
         return ResponseEntity.ok(categoriesDTO);
     }
 
