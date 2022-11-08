@@ -4,7 +4,6 @@ import com.acme.catalog.dto.CategoryDTO;
 import com.acme.catalog.dto.ProductDTO;
 import com.acme.catalog.entities.Category;
 import com.acme.catalog.entities.Product;
-import com.acme.catalog.repositories.CategoryRepository;
 import com.acme.catalog.repositories.ProductRepository;
 import com.acme.catalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ public class ProductService {
 
     @Autowired
     ProductRepository productRepository;
-
-    @Autowired
-    CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAllPaged(Pageable pageable) {
@@ -79,7 +75,7 @@ public class ProductService {
 
         productEntity.getCategories().clear();
         for (CategoryDTO categoryDTO : productDTO.getCategories()) {
-            Category category = categoryRepository.getReferenceById(categoryDTO.getId());
+            Category category = new Category(categoryDTO.getId(), null);
             productEntity.getCategories().add(category);
         }
     }
