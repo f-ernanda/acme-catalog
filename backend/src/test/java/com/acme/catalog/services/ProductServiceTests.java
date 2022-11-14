@@ -8,7 +8,6 @@ import com.acme.catalog.tests.Factory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -45,7 +44,7 @@ public class ProductServiceTests {
         existingId = 1L;
         nonExistingId = 100L;
 
-        //Mock product
+        //Mock product and DTO
         product = Factory.createProduct(existingId);
         productDTO = Factory.createProductDTO();
 
@@ -53,14 +52,14 @@ public class ProductServiceTests {
         PageImpl<Product> page = new PageImpl<>(List.of(product));
 
         //Mock findAll
-        when(productRepository.findAll((Pageable) ArgumentMatchers.any())).thenReturn(page);
+        when(productRepository.findAll((Pageable) any())).thenReturn(page);
 
         //Mock findById
         when(productRepository.findById(existingId)).thenReturn(Optional.of(product));
         when(productRepository.findById(nonExistingId)).thenReturn(Optional.empty());
 
         //Mock save
-        when(productRepository.save(ArgumentMatchers.any())).thenReturn(product);
+        when(productRepository.save(any())).thenReturn(product);
 
         //Mock getReferenceById
         when(productRepository.getReferenceById(existingId)).thenReturn(product);
